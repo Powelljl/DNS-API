@@ -6,25 +6,25 @@ const Router = require('./router')
 async function cloudflareDNS(request) {	
 	try {
 		let url 				= new URL(request.url)
-		let domain 				= url.pathname.split('/')[2]
-		let type 				= url.pathname.split('/')[3]
+		let domain 				= url.pathname.split('/')[4]
+		let type 				= url.pathname.split('/')[5]
 
 		let dnssec_data;
 		let dnssec_validation;
 
-		if (url.pathname.split('/')[4] !== null) {
-			dnssec_data = url.pathname.split('/')[4];
+		if (url.pathname.split('/')[6] !== null) {
+			dnssec_data = url.pathname.split('/')[6];
 		} else {
 			dnssec_data = 0;
 		}
 		
-		if (url.pathname.split('/')[5] !== null) {
-			dnssec_validation = url.pathname.split('/')[5];
+		if (url.pathname.split('/')[7] !== null) {
+			dnssec_validation = url.pathname.split('/')[7];
 		} else {
 			dnssec_validation = 0;
 		}
 		
-		let filter = url.pathname.split('/')[7]		
+		let filter = url.pathname.split('/')[8]		
 		
 		let init = {}
 		let body = {}
@@ -70,20 +70,20 @@ async function cloudflareDNS(request) {
 async function googleDNS(request) {	
 	try {
 		let url		= new URL(request.url)
-		let domain	= url.pathname.split('/')[2]
-		let type	= url.pathname.split('/')[3]
+		let domain	= url.pathname.split('/')[4]
+		let type	= url.pathname.split('/')[5]
 		
 		let dnssec_data;
 		let dnssec_validation;
 
-		if (url.pathname.split('/')[4] != null) {
-			dnssec_data = url.pathname.split('/')[4];
+		if (url.pathname.split('/')[6] != null) {
+			dnssec_data = url.pathname.split('/')[6];
 		} else {
 			dnssec_data = 0;
 		}
 		
-		if (url.pathname.split('/')[5] != null) {
-			dnssec_validation = url.pathname.split('/')[5];
+		if (url.pathname.split('/')[7] != null) {
+			dnssec_validation = url.pathname.split('/')[7];
 		} else {
 			dnssec_validation = 0;
 		}
@@ -113,9 +113,9 @@ async function googleDNS(request) {
 async function handleRequest(request) {
     const r = new Router()
     
-	r.get('/', 					() => new Response('Specify a provider'))
-    r.get('/cloudflare.*', 		request => cloudflareDNS(request))
-    r.get('/google.*', 			request => googleDNS(request))
+	r.get('/', 							() => new Response('Specify a provider'))
+    r.get('/api/dns/cloudflare.*', 		request => cloudflareDNS(request))
+    r.get('/api/dns/google.*', 			request => googleDNS(request))
 
     const resp = await r.route(request)
     return resp
